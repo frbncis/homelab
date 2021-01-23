@@ -1,0 +1,35 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: traefik-system
+spec:
+  releaseName: traefik
+  chart:
+    repository: https://helm.traefik.io/traefik/
+    name: traefik
+    version: 9.12.0
+  values:
+    deployment:
+      podLabels:
+        app: traefik
+    ports:
+     websecure:
+      tls:
+        enabled: true
+    # logs:
+    #   access:
+    #     enabled: true
+    nodeSelector:
+      topology.kubernetes.io/region: tor1
+    providers:
+      kubernetesIngress:
+        publishedService:
+          enabled: true
+    additionalArguments:
+      - "--providers.kubernetesIngress.ingressClass=traefik"
+      - "--providers.kubernetesingress.ingressendpoint.publishedservice=traefik-system/traefik"
+    ingressClass:
+      enabled: true
+      isDefaultClass: true
