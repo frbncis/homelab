@@ -33,3 +33,16 @@ spec:
     ingressClass:
       enabled: true
       isDefaultClass: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-cip
+  namespace: traefik-system
+spec:
+  ports:
+  - port: 9000
+    protocol: TCP
+    name: dashboard
+  selector:
+    app: traefik
